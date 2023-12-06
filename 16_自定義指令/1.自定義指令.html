@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定義指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+   需求1：定義一個v-big指令，和v-text功能類似，但會把繫結的數值放大10倍。
+   需求2：定義一個v-fbind指令，和v-bind功能類似，但可以讓其所繫結的input元素預設獲取焦點。
+   自定義指令總結：
+			一、定義語法：
+						(1).區域性指令：
+							new Vue({directives:{指令名:配置對像} })   或  new Vue({directives: {指令名:回撥函式}})
+						(2).全域性指令：
+							Vue.directive(指令名,配置對像) 或  Vue.directive(指令名,回撥函式)
+
+			二、配置對像中常用的3個回撥：
+						(1).bind：指令與元素成功繫結時呼叫。
+						(2).inserted：指令所在元素被插入頁面時呼叫。
+						(3).update：指令所在模板結構被重新解析時呼叫。
+
+			三、備註：
+				         1.指令定義時不加v-，但使用時要加v-；
+						 2.指令名如果是多個單詞，要使用kebab-case命名方式，不要用camelCase命名。
+-->
+<!--
+  下面的這是模版，要經過vue的解析才能放到頁面中，dom樹里
+-->
+<div id="root">
+    <h2>目前的n值是：<span v-text="n"></span></h2>
+<!--    <h2>放大10倍后的n值是: <span v-big-number="n"></span></h2>-->
+    <h2>放大10倍后的n值是: <span v-big="n"></span></h2>
+    <button @click="n++">點我n+1</button>
+    <p>測試指令函式所呼叫的時機: {{ name }} </p>
+    <hr/>
+    <input type="text" v-fbind:value="n"/>
+</div>
+<div id="root2">
+    <input type="text" v-fbind:value="x"/>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    //此時自定義fbind指令使全域性指令了，其他vue實例所管理的容器也可以使用
+    //全域性指令
+    Vue.directive('fbind', {
+        bind(el, binding){
+            // console.log('bind')
+            el.value = binding.value;
+        },
+        //指令被插入頁面時
+        inserted(el, binding){
+            // console.log('inserted')
+            el.focus();
+        },
+        //指令所在模版被重新解析時
+        update(el, binding){
+            // console.log('update');
+            el.value = binding.value;
+        }
+    })
+    const vm = new Vue({
+        el:"#root",
+        data:{
+            name: '上海',
+            n:1
+        },
+        //定義指令的配置項: directives
+        directives:{
+            /**
+             big函式的呼叫時機:
+                    1.指令與元素成功繫結(但注意此時dom元素還沒有成功的被弄到頁面上去)時會被呼叫 (首次,類似於dom元素一載入)
+                    2.指令所在的模版被重新解析時會被再次呼叫
+            **/
+            //兩種寫法:1.對像(key-value) 2.函式
+            // 'big-number'(el,binding){
+            //     console.log('big被呼叫啦！')
+            //     //收到兩個參數，第一個參數代表真實dom元素，第二個參數是繫結對象，關注該繫結對像中的value屬性
+            //     // console.log(el,binding);
+            //     //原生dom的操作
+            //     el.innerText = binding.value * 10;
+            // },
+            big(el,binding){
+                console.log(this); //注意此處this===window vue實例對像此時'不管'你寫在指令裡面的函式了
+                console.log('big被呼叫啦！')
+                //收到兩個參數，第一個參數代表真實dom元素，第二個參數是繫結對象，關注該繫結對像中的value屬性
+                // console.log(el,binding);
+                //原生dom的操作
+                el.innerText = binding.value * 10;
+            },
+            //自定義fbind繫結
+            //換成對像寫法 對比函式簡寫方式其實只是多了 inserted鉤子
+            // fbind:{
+            //     //指令與元素成功繫結
+            //     // bind(el, binding){
+            //     //     // console.log('bind')
+            //     //     el.value = binding.value;
+            //     // },
+            //     // //指令被插入頁面時
+            //     // inserted(el, binding){
+            //     //     // console.log('inserted')
+            //     //     el.focus();
+            //     // },
+            //     // //指令所在模版被重新解析時
+            //     // update(el, binding){
+            //     //     // console.log('update');
+            //     //     el.value = binding.value;
+            //     // }
+            // }
+        }
+    });
+
+    const vm2 = new Vue({
+        el:'#root2',
+        data:{
+            x: 1,
+        }
+    })
+</script>
+</body>
+</html>

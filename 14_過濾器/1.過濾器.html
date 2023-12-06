@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue中過濾器</title>
+    <script src="../js/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+			過濾器：
+				定義：對要顯示的數據進行特定格式化后再顯示（適用於一些簡單邏輯的處理）。
+				語法：
+						1.註冊過濾器：Vue.filter(name,callback) 或 new Vue{filters:{}}
+						2.使用過濾器：{{ xxx | 過濾器名}}  或  v-bind:屬性 = "xxx | 過濾器名"
+				備註：
+						1.過濾器也可以接收額外參數、多個過濾器也可以串聯
+						2.並沒有改變原本的數據, 是產生新的對應的數據
+     -->
+    <h1>顯示格式化后的時間</h1>
+    <!--計算屬性實現-->
+    <h2>現在是:{{ fmtTime }}</h2>
+    <!--methods實現-->
+    <h2>現在是{{ getFmtTime() }}</h2>
+    <!--過濾器實現-->
+    <h2>現在是:{{ time |  timeFormater }}</h2>
+    <!--過濾器也可以傳遞參數-->
+    <h2>現在是:{{ time | timeFormater('YYYY-MM-DD') | mySlice }}</h2>
+    <h3 :x="msg | mySlice">你好,世界</h3>
+</div>
+<div id="root2">
+   <h2>{{ msg | mySlice }}</h2>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    //全域性過濾器的配置
+    //注意配置一定要new vue實例之前確定
+    Vue.filter('mySlice', function (val){
+        return val.slice(0,4);
+    });
+    new Vue({
+        el: "#root",
+        data:{
+            time: 1631808423062,
+            msg: "你好，世界"
+        },
+        computed:{
+            fmtTime(){
+                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+            }
+        },
+        methods:{
+            getFmtTime(){
+                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+            }
+        },
+        //區域性過濾器
+        filters:{
+            //過濾器本質上也是一個函式
+            timeFormater(val, formate = 'YYYY-MM-DD HH:mm:ss'){
+                return dayjs(val).format(formate)
+            },
+        }
+    });
+
+    const vm2 = new Vue({
+        el:"#root2",
+        data:{
+            msg:'welcome'
+        }
+    })
+</script>
+</body>
+</html>

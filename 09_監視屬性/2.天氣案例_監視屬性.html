@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>天氣案例_監視屬性</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+         <!--
+				監視屬性watch：
+					1.當被監視的屬性變化時, 回撥函式自動呼叫, 進行相關操作
+					2.監視的屬性必須存在，才能進行監視！！
+					3.監視的兩種寫法：
+							(1).new Vue時傳入watch配置
+							(2).通過vm.$watch監視
+		 -->
+    <h1>今天天氣很 {{ info }}</h1>
+    <button @click="changeWeather">
+        切換
+    </button>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el:'#root',
+        data:{
+            isHot: true
+        },
+        //計算屬性
+        computed: {
+            info(){
+                return this.isHot ? '炎熱' : '涼爽';
+            }
+        },
+        //改變模版數據的方法
+        methods:{
+            changeWeather(){
+                this.isHot = !this.isHot;
+            }
+        },
+        // watch:{
+        //     //監視的配置對像
+        //     //watch不僅能監視data的普通屬性，也可以檢測計算屬性
+        //     isHot:{
+        //         immediate: true, //當這個屬性為true時，頁面剛渲染就執行handler函式
+        //         //handler 什麼時候呼叫呢
+        //         //當isHot發生改變就會呼叫該函式
+        //         //handler接收兩個參數，一個是這個狀態參數改變前的值，另一個是改變后的舊值
+        //         handler(newValue, preValue){
+        //             console.log('ishot 被修改了');
+        //             console.log(`newValue: ${newValue}, preValue: ${preValue}`);
+        //         }
+        //     }
+        // }
+    });
+    //watch的第二種寫法，直接採用vm對像實例
+    vm.$watch('isHot', {
+        immediate: true, //當這個屬性為true時，頁面剛渲染就執行handler函式
+        //handler 什麼時候呼叫呢
+        //當isHot發生改變就會呼叫該函式
+        //handler接收兩個參數，一個是這個狀態參數改變前的值，另一個是改變后的舊值
+        handler(newValue, preValue){
+            console.log('ishot 被修改了');
+            console.log(`newValue: ${newValue}, preValue: ${preValue}`);
+        }
+    });
+</script>
+</body>
+</html>

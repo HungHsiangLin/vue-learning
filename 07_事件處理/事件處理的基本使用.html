@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件處理基本</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+        <!--
+				事件的基本使用：
+							1.使用v-on:xxx 或 @xxx 繫結事件，其中xxx是事件名；
+							2.事件的回撥需要配置在methods對像中，最終會在vm上；
+							3.methods中配置的函式，不要用箭頭函式！否則this就不是vm了；
+							4.methods中配置的函式，都是被Vue所管理的函式，this的指向是vm 或 元件實例對像；
+							5.@click="demo" 和 @click="demo($event)" 效果一致，但後者可以傳參；
+		-->
+    <div id="root">
+        <!--指令語法 v開頭 例如v-on:click點選事件-->
+        <h1>歡迎 {{ name }} </h1>
+        <button v-on:click="showInfo1">點我提示資訊1</button>
+        <!--簡寫形式 @click-->
+        <button @click="showInfo2($event,66)">點我提示資訊2</button>
+    </div>
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+        const vm = new Vue({
+            el: '#root',
+            data(){
+                return {
+                   name: 'shanghai',
+
+                }
+            },
+            //methods配置事件處理的回撥函式
+            methods:{
+                showInfo1(e){
+                    //預設給你傳遞event參數
+                    //當是箭頭函式的話this那就是window
+                    console.log(this === vm); //this是vue實例
+                    console.log('你好');
+                },
+                //接收參數
+                showInfo2(e,num){
+                    console.log(e.target);//
+                    console.log(`接收參數：${num}`);
+                }
+            }
+        });
+
+
+    </script>
+</body>
+</html>

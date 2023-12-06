@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue中表單數據的收集</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+			收集表單數據：
+					若：<input type="text"/>，則v-model收集的是value值，使用者輸入的就是value值。
+					若：<input type="radio"/>，則v-model收集的是value值，且要給標籤配置value值。
+					若：<input type="checkbox"/>
+							1.沒有配置input的value屬性，那麼收集的就是checked（勾選 or 未勾選，是布爾值）
+							2.配置input的value屬性:
+									(1)v-model的初始值是非陣列，那麼收集的就是checked（勾選 or 未勾選，是布爾值）
+									(2)v-model的初始值是陣列，那麼收集的的就是value組成的陣列
+					備註：v-model的三個修飾符：
+									lazy：失去焦點再收集數據
+									number：輸入字串轉為有效的數字
+									trim：輸入首尾空格過濾
+		-->
+    <form @submit.prevent="demo">
+        <!--寫了label則點選它也能使指定的input獲取焦點 for屬性的值為指定元素的id-->
+        <label for="demo">賬號:</label>
+        <!--v-model主要用來雙向繫結輸入類表單value值-->
+        <input type="text" id="demo" v-model.trim="userInfo.account"/>
+        <br/>
+        密碼: <input type="password" v-model="userInfo.password"/>
+        <br/>
+        性別:
+        <!--一組radio單選框的name值一定要相同 設定value值好讓v-model去雙向繫結-->
+        男:<input type="radio" v-model="userInfo.sex" name="sex" value="male"/>
+        女:<input type="radio" v-model="userInfo.sex" name="sex" value="female"/>
+        <br/>
+        年齡: <input type="number" v-model.number="userInfo.age"/>
+        <br/>
+        愛好:
+        <!--如果沒有value值則v-model收集checked元素-->
+        學習 <input v-model="userInfo.hobby" type="checkbox" value="study"/>
+        打遊戲 <input v-model="userInfo.hobby" type="checkbox" value="game"/>
+        吃飯 <input v-model="userInfo.hobby" type="checkbox" value="eat" />
+        <br/>
+        所屬校區
+        <select v-model="userInfo.city">
+            <option value="">請選擇校區</option>
+            <option value="Beijing">北京</option>
+            <option value="Shanghai">上海</option>
+            <option value="Shenzhen">深圳</option>
+            <option value="Wuhan">武漢</option>
+        </select>
+        <br/>
+        其他資訊<textarea v-model.lazy="userInfo.other"></textarea>
+        <br/>
+        <input type="checkbox" v-model="userInfo.ifAgree"/>閱讀並接受<a href="https://www.google.com.tw">《使用者協議》</a>
+        <button>提交數據</button>
+    </form>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: '#root',
+        data:{
+            userInfo:{
+                account: '',
+                password: '',
+                sex: 'male',
+                age:'',
+                hobby:[],
+                city:'',
+                other:'',
+                ifAgree:''
+            }
+        },
+        methods:{
+            demo(){
+                //json轉換為string
+                console.log(JSON.stringify(this.userInfo));
+            }
+        }
+    })
+</script>
+</body>
+</html>

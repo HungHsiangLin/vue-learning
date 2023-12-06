@@ -1,11 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <!--
+       通過包裹陣列更新元素的方法實現，本質就是做了兩件事：
+			    (1).呼叫原生對應的方法對陣列進行更新。
+				(2).重新解析模板，進而更新頁面。
+	   在Vue修改陣列中的某個元素一定要用如下方法：
+			   1.使用這些API:push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+			   2.Vue.set() 或 vm.$set()
+    -->
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>vue.set()的使用</title>
+    <title>vue監測數據改變的原理_陣列</title>
     <script src="../js/vue.js"></script>
 </head>
 <body>
@@ -24,6 +32,20 @@
      <ul v-for="(f, index) in stu.friends" :key="index">
          <li>{{ f.name }} -- {{ f.age }}</li>
      </ul>
+    <h2>愛好</h2>
+    <!--
+      Vue 將被偵聽的陣列的變更方法進行了包裹，所以它們也將會觸發檢視更新。這些被包裹過的方法包括：
+      push()
+      pop()
+      shift()
+      unshift()
+      splice()
+      sort()
+      reverse()
+    -->
+    <ul v-for="(h, index) in stu.hobbies" :key="index">
+        <li>{{ h }}</li>
+    </ul>
 </div>
 <script type="text/javascript">
     const vm = new Vue({
@@ -37,6 +59,7 @@
                      rage: 12,
                      sage: 29
                  },
+                 hobbies: ['抽菸', '喝酒', '燙頭'],
                  friends: [
                      { name: 'Jerry', age: 23 },
                      { name: 'Jane', age: 18 }
@@ -50,7 +73,7 @@
                 //注意對像不能是 Vue 實例，或者 Vue 實例的根數據對象。
                 Vue.set(this.stu, 'sex', '男')
                 // this.$set(this.stu, 'sex', '男');
-            }
+            },
         }
      })
 </script>

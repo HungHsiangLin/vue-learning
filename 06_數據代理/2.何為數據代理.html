@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>定義數據代理</title>
+</head>
+<body>
+    <!-- 數據代理，通過一個對像代理另一個對像中屬性的操作  -->
+    <script type="text/javascript">
+        let obj = { x:200 }
+        let obj2 = { y:200 }
+        //通過obj2代理obj，來操作obj的x
+        Object.defineProperty(obj2, 'x',{
+            get(){
+                return obj.x
+            },
+            set(v){
+                obj.x = v;
+            }
+        });
+
+    </script>
+</body>
+</html>

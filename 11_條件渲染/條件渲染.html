@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>條件渲染</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+				條件渲染：
+							1.v-if
+										寫法：
+												(1).v-if="表達式"
+												(2).v-else-if="表達式"
+												(3).v-else="表達式"
+										適用於：切換頻率較低的場景。
+										特點：不展示的DOM元素直接被移除。
+										注意：v-if可以和:v-else-if、v-else一起使用，但要求結構不能被「打斷」。
+
+							2.v-show
+										寫法：v-show="表達式"
+										適用於：切換頻率較高的場景。
+										特點：不展示的DOM元素未被移除，僅僅是使用樣式隱藏掉
+
+							3.備註：使用v-if的時，元素可能無法獲取到，而使用v-show一定可以獲取到。
+		 -->
+
+<div id="root">
+    <!--v-show要能轉換為一個布爾值 v-show條件渲染-->
+<!--    <h2 v-show="a">歡迎來到{{ name }}</h2>-->
+
+<!--    <h2 v-show="1===1">歡迎來到{{ name }}</h2>-->
+<!--    <button @click='a = !a'>{{ a ? '隱藏': '顯示' }}</button>-->
+    <!--使用v-if來進行條件渲染 -->
+<!--    <h2 v-if="1">歡迎來到{{ name }}</h2>-->
+    <!--v-if v-else-if v-else記住不能打斷，要連著寫-->
+<!--    <h2>目前的n值是{{ n }}</h2>-->
+    <button @click="n++">點我n+1</button>
+<!--    <div v-if="n === 1">angular</div>-->
+<!--    <div v-else-if="n === 2">react</div>-->
+<!--&lt;!&ndash;    <div>111</div>&ndash;&gt;-->
+<!--    <div v-else-if="n === 3">vue js</div>-->
+<!--    <div v-else>not found</div>-->
+
+    <!--v-if與template的配合使用-->
+    <template v-if="n === 1">
+        <h2>你好</h2>
+        <h2>shanghai</h2>
+        <h2>shenzhen</h2>
+    </template>
+</div>
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data:{
+            name: 'shanghai',
+            n:0
+        }
+    })
+</script>
+</body>
+</html>

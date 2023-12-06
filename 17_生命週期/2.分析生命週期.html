@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>分析vue中生命週期</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root" :x="n">
+    <h1>目前的n值是{{ n }}</h1>
+    <h1 v-text="n"></h1>
+    <button @click="add">點我+1</button>
+    <button @click="bye">點我銷燬vm</button>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    new Vue({
+        el:"#root",
+        //template模版字串只能有一個根結點
+        // template:'<div><h1>目前的n值是{{ n }}</h1>\n' +
+        //     '<button @click="add">點我+1</button></div>',
+        //注意template是不能作為根標籤來使用的，不能去騙vue，可以用fragment(vue3新加，模仿react)
+        data: {
+            n: 1
+        },
+        methods:{
+            add(){
+                console.log('add')
+                this.n++;
+            },
+            bye(){
+                //實例銷燬后呼叫。該鉤子被呼叫后，對應 Vue 實例的所有指令都被解綁，所有的(自定義)事件監聽器被移除，所有的子實例也都被銷燬。
+                console.log('bye');
+                this.$destroy();
+            }
+        },
+        watch:{
+            n(){
+                console.log('n變了');
+            }
+        },
+        beforeCreate(){
+            console.log('beforeCreate');
+            // console.log(this);
+
+        },
+        created(){
+            console.log('created');
+            // console.log(this);
+        },
+        beforeMount(){
+            console.log('beforeMount');
+            // console.log(this);
+        },
+        mounted(){
+            console.log('mounted');
+            console.log(this);
+            // document.querySelector('h1').innerText = 'hahah';
+        },
+        beforeUpdate(){
+            console.log('beforeUpdate');
+            //console.log(this.n); //此時數據是新的，頁面還是舊的，vue還沒根據新的數據去產生新的虛擬dom，去比較舊的虛擬dom
+        },
+        updated(){
+            console.log('updated');
+            console.log(this.n); //此時數據是新的，頁面也是新的，同步
+        },
+        beforeDestroy(){
+            //仍然可以使用data,methods，關閉定時器，取消訂閱訊息，解綁自定義事件等收尾工作，移除watchers
+            console.log('beforeDestroy');
+            console.log(this.n);
+            // this.add(); //記住一旦到了beforeDestroy或者destroyed鉤子，即使你拿到數據想要更新它也不會走更新的路了(beforeUpdate,updated)
+        },
+        //destroyed鉤子幾乎不用
+        destroyed(){
+          console.log('destroyed');
+        }
+    });
+
+
+</script>
+</body>
+</html>
