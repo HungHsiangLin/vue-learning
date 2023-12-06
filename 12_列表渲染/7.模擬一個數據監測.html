@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模擬數據監測</title>
+</head>
+<body>
+<script type="text/javascript">
+    let data = {
+        name: "武漢科技大學",
+        address: '武漢'
+    }
+    //無限遞迴 呼叫棧炸了 記憶體溢出
+    //錯誤寫法
+    // Object.defineProperty(data, 'name', {
+    //     get(){
+    //         return data.name
+    //     },
+    //     set(val){
+    //         data.name = val;
+    //     }
+    // })
+
+    //建立一個監視實例對像
+    const obs = new Observer(data);
+
+    //準備一個vm實例
+    let vm = { };
+
+    vm._data = data = obs;
+
+    //觀察者
+    function Observer(obj){
+        //缺陷：未實現遞迴(對像巢狀對象就會出現問題)
+        const keys = Object.keys(obj);
+        //遍歷對像當中所有的key
+        keys.forEach(key => {
+            Object.defineProperty(this, key, {
+                get(){
+                    return obj[key]
+                },
+                set(v) {
+                  console.log(`${key}的值改變了,變為${v}`);
+                  obj[key] = v;
+                }
+            })
+        });
+    }
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>生命週期函式(鉤子)</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+			生命週期：
+				1.又名：生命週期回撥函式、生命週期函式、生命週期鉤子。
+				2.是什麼：Vue在關鍵時刻幫我們呼叫的一些特殊名稱的函式。
+				3.生命週期函式的名字不可更改，但函式的具體內容是程式設計師根據需求編寫的。
+			    4.生命週期函式中的this指向是vm 或 元件實例對象。
+	-->
+    <h1 v-if="a">你好啊</h1>
+    <!--v-bind繫結-->
+    <h1 :style="{opacity}">歡迎學習vue</h1>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el:"#root",
+        data:{
+            opacity: 1,
+            a:true
+        },
+        methods:{
+        },
+
+        //mounted
+        //vue完成模版的解析並把初始的真實的dom元素掛載完畢就呼叫mounted函式
+        //只調用一次
+        mounted(){
+            //關鍵性時刻呼叫對應的函式 生命週期
+            console.log('mounted');
+            const timer = setInterval(() => {
+                //剪頭函式沒有this會從外部作用域尋找 mounted是由vue管理的函式，所以該函式中的this是vm(vue實例對像)
+                this.opacity -= 0.01;
+                if(this.opacity <= 0) this.opacity = 1;
+            },16);
+        }
+    });
+
+    //通過外部的定時器實現，不推薦
+    // setInterval(() => {
+    //     vm.opacity -= 0.01;
+    //     if( vm.opacity <= 0) vm.opacity = 1;
+    // }, 16);
+</script>
+</body>
+</html>

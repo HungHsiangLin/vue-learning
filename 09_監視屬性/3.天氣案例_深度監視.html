@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>天氣案例_深度監視</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+		深度監視：
+				(1).Vue中的watch預設不監測對像內部值的改變（一層）。
+				(2).配置deep:true可以監測對像內部值改變（多層）。
+		備註：
+				(1).Vue自身可以監測對像內部值的改變，但Vue提供的watch預設不可以(想讓它可以則配置deep:true)！
+				(2).使用watch時根據數據的具體結構，決定是否採用深度監視。
+	-->
+    <h1>今天天氣很 {{ info }}</h1>
+    <button @click="changeWeather">
+        切換
+    </button>
+    <hr/>
+    <h3>a的值是:{{ numbers.a }}</h3>
+    <button @click="numbers.a++">
+        點我讓a加一
+    </button>
+    <h3>b的值是:{{ numbers.b }}</h3>
+    <button @click="numbers.b++">
+        點我讓b加一
+    </button>
+    <h1>
+        測試vue自身監測數據屬性
+        {{ numbers.d.e }}
+    </h1>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el:'#root',
+        data:{
+            isHot: true,
+            numbers:{
+                a:1,
+                b:1,
+                d:{
+                    e:2
+                }
+            }
+        },
+        //計算屬性
+        computed: {
+            info(){
+                return this.isHot ? '炎熱' : '涼爽';
+            }
+        },
+        //改變模版數據的方法
+        methods:{
+            changeWeather(){
+                this.isHot = !this.isHot;
+            }
+        },
+        watch:{
+            //監視的配置對像
+            //watch不僅能監視data的普通屬性，也可以檢測計算屬性
+            isHot:{
+                //immediate: true, //當這個屬性為true時，頁面剛渲染就執行handler函式
+                //handler 什麼時候呼叫呢
+                //當isHot發生改變就會呼叫該函式
+                //handler接收兩個參數，一個是這個狀態參數改變前的值，另一個是改變后的舊值
+                handler(newValue, preValue){
+                    console.log('ishot 被修改了');
+                    console.log(`newValue: ${newValue}, preValue: ${preValue}`);
+                }
+            },
+            //監測多級結構裡面的屬性 深度監視
+            // 'numbers.a':{
+            //     handler(){
+            //       console.log('a發生改變了')
+            //     }
+            // }
+            //深度監視numbers中的所有屬性
+            numbers:{
+                deep: true, //監視多級結構的屬性
+                handler(){
+                    console.log('numbers 發生改變')
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

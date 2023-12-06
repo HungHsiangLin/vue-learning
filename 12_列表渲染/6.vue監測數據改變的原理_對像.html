@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue監測數據改變的原理</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+  2. 如何監測對像中的數據？
+		 通過setter實現監視，且要在new Vue時就傳入要監測的數據。
+		 		(1).對像中后追加的屬性，Vue預設不做響應式處理
+				(2).如需給后新增的屬性做響應式，請使用如下API：
+							Vue.set(target，propertyName/index，value) 或
+						    vm.$set(target，propertyName/index，value)
+-->
+<div id="root">
+    <h2>學校名稱:{{ name }}</h2>
+    <h2>學校地址:{{ address }}</h2>
+</div>
+<script type="text/javascript">
+    const vm = new Vue({
+         el: '#root',
+         data:{
+             name: '武漢科技大學',
+             address: '武漢',
+             stu:{
+                 name: 'tom',
+                 age:{
+                     rage: 12,
+                     sage: 29
+                 },
+                 friends: [
+                     { name: 'test', age: 18, sex: 'male' }
+                 ]
+             }
+         }
+     })
+</script>
+</body>
+</html>

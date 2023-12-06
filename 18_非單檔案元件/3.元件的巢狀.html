@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>元件的巢狀</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root" :x="x">
+    <!--元件的巢狀-->
+<!--    <school>-->
+<!--    </school>-->
+<!--    <hello></hello>-->
+<!--    <app></app>-->
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+
+    const student = Vue.extend({
+        template: `
+           <div>
+              <h2>學生姓名:{{ name }}</h2>
+              <h2>學生年齡:{{ age }}</h2>
+
+           </div>
+        `,
+        data(){
+            return {
+                name: 'JONE',
+                age:13
+            }
+        },
+    });
+
+    const school = Vue.extend({
+        template: `
+          <div>
+             <h1>學校名稱:{{ name }}</h1>
+             <h1>學校地址:{{ address }}</h1>
+             <!--子元件註冊給哪個父元件，就巢狀在哪個副元件裡面--->
+             <student></student>
+          </div>
+        `,
+
+        data(){
+            return {
+                name: '武漢科技大學',
+                address:'武漢'
+            }
+        },
+
+        //元件巢狀
+        //這裡也是區域性註冊元件
+        components: {
+           student
+        }
+    });
+
+
+      const hello = Vue.extend({
+          template: `<h1>{{ msg }}</h1>`,
+          data(){
+              return {
+                  msg: 'hello, my vue world',
+              }
+          },
+      });
+
+
+      const app = Vue.extend({
+          template:`<div>
+            <school></school>
+            <hello></hello>
+          </div>`,
+          components:{
+              school,
+              hello
+          }
+      });
+
+        new Vue({
+        template: `<app></app>`,
+        el:"#root",
+        //註冊元件(區域性)
+        components:{
+            // //schoo元件與hello元件平級
+            // school,
+            // hello
+            app,
+        },
+        data:{
+            x:1,
+        }
+    });
+
+
+</script>
+</body>
+</html>

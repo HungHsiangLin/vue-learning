@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VueComponent</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+			關於VueComponent：
+						1.school元件本質是一個名為VueComponent的建構函式，且不是程式設計師定義的，是Vue.extend產生的。
+
+						2.我們只需要寫<school/>或<school></school>，Vue解析時會幫我們建立school元件的實例對象，
+							即Vue幫我們執行的：new VueComponent(options)。
+
+						3.特別注意：每次呼叫Vue.extend，返回的都是一個全新的VueComponent！！！！注意這一點很重要
+
+						4.關於this指向：
+								(1).元件配置中：
+											data函式、methods中的函式、watch中的函式、computed中的函式 它們的this均是【VueComponent實例對像】。
+								(2).new Vue(options)配置中：
+											data函式、methods中的函式、watch中的函式、computed中的函式 它們的this均是【Vue實例對像】。
+
+						5.VueComponent的實例對象，以後簡稱vc（也可稱之為：元件實例對像）。
+							Vue的實例對象，以後簡稱vm。 vm管理著一個又一個vc，vc可以再
+					    6.因為元件是可複用的 Vue 實例，所以它們與 new Vue 接收相同的選項，例如 data、computed、watch、methods 以及生命週期鉤子等。僅有的例外是像 el 這樣根實例特有的選項。
+					      所以vm與vc屬性配置並不是一模一樣，儘管vc底層複用了很多vm的邏輯
+-->
+<div id="root">
+    <school></school>
+    <hello>
+    </hello>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+
+    const school = Vue.extend({
+        template: `
+          <div>
+             <h1>學校名稱:{{ name }}</h1>
+             <h1>學校地址:{{ address }}</h1>
+             <button @click="showname">點我提示學校名</button>
+          </div>
+        `,
+        data(){
+            return {
+                name: '武漢科技大學',  //vuecomponent的實例對像
+                address:'武漢'
+            }
+        },
+        methods:{
+            showname(){
+              console.log(this);
+              console.log(this.name);
+           }
+        }
+    });
+
+    // console.log(typeof school, school); //所謂的元件就是建構函式(VueComponent);
+
+
+    //測試元件
+    const test = Vue.extend({
+       template:  `<h1>panyue</h1>`
+    });
+
+    //hello元件
+    const hello = Vue.extend({
+        template:`
+          <div>
+          <h1>{{ msg }}</h1>
+          <test></test>
+        </div>`,
+        data(){
+            return {
+                msg: '你好'
+            }
+        },
+        components: {
+            test
+        }
+    })
+
+
+    const vm = new Vue({
+        el:"#root",
+        components:{
+            school,
+            hello
+        }
+    });
+
+    //驗證school與hello並不是同一個VueComponent建構函式
+    // school.a = 99;
+    // console.log('@', school);
+    // console.log('#', hello);
+    // console.log(school === hello);
+    // console.log(school.a, hello.a);
+</script>
+</body>
+</html>

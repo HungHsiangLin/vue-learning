@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>非單檔案元件的基本使用</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+			Vue中使用元件的三大步驟：
+					一、定義元件(建立元件)
+					二、註冊元件
+					三、使用元件(寫元件標籤)
+
+			一、如何定義一個元件？
+						使用Vue.extend(options)建立，其中options和new Vue(options)時傳入的那個options幾乎一樣，但也有點區別；
+						區別如下：
+								1.el不要寫，為什麼？ ——— 最終所有的元件都要經過一個vm的管理，由vm中的el決定服務哪個容器。
+								2.data必須寫成函式，為什麼？ ———— 避免元件被複用時，數據存在引用關係。
+						備註：使用template可以配置元件結構。
+
+			二、如何註冊元件？
+							1.區域性註冊：靠new Vue的時候傳入components選項
+							2.全域性註冊：靠Vue.component('元件名',元件)
+
+			三、編寫元件標籤：
+							<school></school>
+-->
+<div id="root">
+    <h1>
+        {{ msg }}
+    </h1>
+    <hello></hello>
+    <!--使用元件-->
+    <school></school>
+    <hr/>
+    <student></student>
+    <hr/>
+</div>
+<div id="root2">
+   <h2>root2容器</h2>
+    <hello></hello>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+
+    //全部註冊
+
+    /**
+     * 想用元件的三個步驟
+     * 1.建立元件
+     * 2.註冊元件
+     * 3.使用元件
+     */
+        //建立school元件
+    const school = Vue.extend({
+            template: `
+              <div>
+              <h2>學校名稱:{{ schoolName }}</h2>
+              <h2>學校地址:{{ address }}</h2>
+              <button @click="showName">點我提示學校名</button>
+              </div>
+            `,
+            //元件定義不要寫el配置項，因為最終所有的元件都要被vm所管理，由vm決定服務於哪個容器
+            //這裡data必須寫成函式形式 避免多次使用元件導致共用data對像導致一個問題
+            data() {
+                //注意這裡不要寫箭頭函式
+                return {
+                    schoolName: '武漢科技大學',
+                    address: '武漢',
+                }
+            },
+            methods:{
+                showName(){
+                    alert(this.schoolName)
+                }
+            }
+        })
+    //建立school元件
+    const student = Vue.extend({
+        template: `
+            <div>
+              <h2>學生名字:{{ studentName }}</h2>
+              <h2>學生年齡:{{ age }}</h2>
+            </div>
+        `,
+        data() {
+            return {
+                studentName: 'Jone',
+                age: 18
+            }
+        }
+    });
+
+
+    const hello = Vue.extend({
+        template:`
+          <div>
+            <h2>你好世界,{{ name }}</h2>
+          </div>
+        `,
+        data(){
+            return {
+                name: 'panyue'
+            }
+        }
+    });
+
+    //hello元件
+    Vue.component('hello', hello); //全域性註冊hello 就代表所有的vm都可以用hello元件了
+
+    // 建立vm
+    new Vue({
+        el: "#root",
+        //配置元件(區域性註冊)
+        data:{
+            msg: 'hello world'
+        },
+        components: {
+            school,
+            student
+        },
+    })
+
+    new Vue({
+       el: '#root2',
+    });
+
+</script>
+</body>
+</html>

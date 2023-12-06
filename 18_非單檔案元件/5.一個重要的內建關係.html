@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一個重要的內建</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+			1.一個重要的內建關係：VueComponent.prototype.__proto__ === Vue.prototype
+			2.為什麼要有這個關係：讓元件實例對像（vc）可以訪問到 Vue原型上的屬性、方法。
+-->
+<div id="root">
+    <!--new VueComponent只有在你寫了<school/>或者<school></school>才會執行-->
+    <school></school>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    //一個內建關係
+    Vue.prototype.x = 99;
+    //注意 VueComponent.prototype.__proto__ === Vue.prototype === vm.__proto__
+
+    const school = Vue.extend({
+        template: `
+          <div>
+             <h1>學校名稱:{{ name }}</h1>
+             <h1>學校地址:{{ address }}</h1>
+             <button @click="showname">點我提示學校名</button>
+             <button @click="cx">點我輸出x</button>
+          </div>
+        `,
+        data(){
+            return {
+                name: '武漢科技大學',  //vuecomponent的實例對像
+                address:'武漢'
+            }
+        },
+        methods:{
+            showname(){
+                console.log(this);
+                console.log(this.name);
+            },
+            cx(){
+                console.log(this); //this是VueComponent的實例對像
+                console.log(this.__proto__.__proto__ === Vue.prototype) //true 這裡重要的內建關係哦！！！
+                console.log()
+                console.log(this.x);
+            }
+        }
+    });
+
+    new Vue({
+        el:"#root",
+        data:{
+            msg: 'hello'
+        },
+        components:{
+            school
+        }
+    });
+
+    //驗證
+
+    // function Demo(){
+    //     this.a = 1;
+    //     this.b = 2;
+    // }
+    // const d = new Demo();
+    // // console.log(d.x);
+    // console.log(Demo.prototype); //顯示原型屬性
+    // console.log(d.__proto__);// 隱士原型屬性 原型對像只有一個
+    // //操作原型對像追加x屬性
+    // Demo.prototype.x = 99;
+    // console.log(d.__proto__ === Demo.prototype)
+</script>
+</body>
+</html>

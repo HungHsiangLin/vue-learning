@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .demo{
+            background: orange;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">
+        點我建立一個輸入框
+    </button>
+    <script type="text/javascript">
+
+        const btn = document.querySelector('#btn');
+        btn.onclick = () => {
+            const input = document.createElement('input');
+            input.className = 'demo';
+            input.value = "99";
+            input.onclick = () => alert('你好,世界');
+
+            console.log(input.parentElement); //此時它的parentElement屬性是null，無法獲取，因為它並不在dom樹中
+
+            //將該input插入到dom樹中
+            document.body.appendChild(input);
+            //input出現的時候，讓其自動獲取焦點
+            //注意一定要在input框被放到dom樹中再執行focus函式，否則它將無法自動獲取焦點
+            //一定要放在dom樹中
+            input.focus();
+            input.parentElement.style.backgroundColor = 'skyblue';
+        }
+    </script>
+</body>
+</html>

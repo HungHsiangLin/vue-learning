@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue計算屬性語法實現</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+			計算屬性：
+					1.定義：要用的屬性不存在，要通過已有屬性計算得來。
+					2.原理：底層藉助了Objcet.defineproperty方法提供的getter和setter。
+					3.get函式什麼時候執行？
+								(1).初次讀取時會執行一次。
+								(2).當依賴的數據發生改變時會被再次呼叫。
+					4.優勢：與methods實現相比，內部有快取機制（複用），效率更高，除錯方便。
+					5.備註：
+							1.計算屬性最終會出現在vm上，直接讀取使用即可。
+							2.如果計算屬性要被修改，那必須寫set函式去響應修改，且set中要引起計算時依賴的數據發生改變。
+		 -->
+    <!--v-model雙向繫結-->
+    姓:<input type="text" v-model="firstName"/>
+    <br/><br/>
+    名:<input type="text" v-model="lastName"/>
+    <br/><br/>
+    測試:<input type="text" v-model="test"/>
+    <br/><br/>
+    全名: <span>{{ fullName }}</span>
+</div>
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            //data里的都是屬性
+            firstName: '張',
+            lastName: '三',
+            test:'test'
+        },
+        //計算屬性--> 舊屬性加工
+        computed: {
+            fullName: {
+                //get的作用，當讀取fullName時get就會被呼叫，且返回值就做為fullName的值
+                //defineProperty
+                //注意vm._data是不存在計算屬性的
+                //計算屬性算完之後直接丟到了viewModel實例對像身上
+                /**
+                 * get的呼叫時機
+                 * 1.初次讀取計算屬性時
+                 * 2.所依賴的數據(data中的屬性)發生變化時，不改變的話直接讀快取
+                 * 3.methods沒有快取，讀幾次就呼叫幾次無論要用的數據是否發生變化
+                 *  @returns {string}
+                 */
+                get(){
+                    //此時get函式中的this指向是vm
+                    console.log('get呼叫了', this);
+                    return this.firstName + '--' + this.lastName
+                },
+                /**
+                 * set什麼時候呼叫
+                 *   1.當fullName被修改時
+                 * @param value
+                 */
+                set(value){
+                    //修改計算屬性所依賴的普通屬性(放在data裡面的)
+                    //this === vm
+                    const [ firstName, lastName ] = value.split('-');
+                    this.firstName = firstName;
+                    this.lastName = lastName; //依賴屬性發生改變之後,計算屬性自動改變
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

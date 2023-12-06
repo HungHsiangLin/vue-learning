@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>幾個基本的注意點</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--
+			幾個注意點：
+					1.關於元件名:
+								一個單詞組成：
+											第一種寫法(首字母小寫)：school
+											第二種寫法(首字母大寫)：School
+								多個單詞組成：
+											第一種寫法(kebab-case命名)：my-school
+											第二種寫法(CamelCase命名)：MySchool (需要Vue腳手架支援)
+								備註：
+										(1).元件名儘可能迴避HTML中已有的元素名稱，例如：h2、H2都不行。
+										(2).可以使用name配置項指定元件在開發者工具中呈現的名字。
+
+					2.關於元件標籤:
+								第一種寫法：<school></school>
+								第二種寫法：<school/>
+								備註：不用使用腳手架時，<school/>會導致後續元件不能渲染。
+
+					3.一個簡寫方式：
+								const school = Vue.extend(options) 可簡寫為：const school = options
+		-->
+    <h1>{{ msg }}</h1>
+    <hello></hello>
+<!--    <school/>-->
+<!--    <school/>-->
+<!--    <school/>-->
+    <school></school>
+    <school></school>
+    <school></school>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+
+    const s = Vue.extend({
+        template: `
+          <div>
+            <h2>學校名稱:{{ name }}</h2>
+            <h2>學校地址:{{ address }}</h2>
+          </div>
+        `,
+        data(){
+            return {
+                name: '武漢科技大學',
+                address: '武漢'
+            }
+        },
+        name: 'test' //該配置是指定元件在開發者工具中指定的名稱
+    });
+
+    //建立元件的簡寫 (不需要vue.extend)
+    const hello = {
+        template: `
+          <div>
+            <h1>{{ msg }}</h1>
+         </div>
+        `,
+        data(){
+            return {
+                msg:"hello"
+            }
+        }
+    }
+
+
+
+    new Vue({
+        el: "#root",
+        data:{
+          msg: '歡迎學習vue'
+        },
+        components:{
+            school:s,
+            hello
+        }
+    })
+</script>
+</body>
+</html>

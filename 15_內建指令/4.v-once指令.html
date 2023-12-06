@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-once指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <!--v-once-->
+    <!--
+			v-once指令：
+						1.v-once所在節點在初次動態渲染后，就視為靜態內容了。
+						2.以後數據的改變不會引起v-once所在結構的更新，可以用於優化效能。
+	-->
+    <h2 v-once>初始化n的值為:{{ n }}</h2>
+    <h2>目前的n值為:{{ n }}</h2>
+    <button @click="n++">帶我n+1</button>
+</div>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    new Vue({
+        el:"#root",
+        data:{
+           n:1
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue 數據繫結</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <!--
+			Vue中有2種數據繫結的方式：
+					1.單向繫結(v-bind)：數據只能從data流向頁面。
+					2.雙向繫結(v-model)：數據不僅能從data流向頁面，還可以從頁面流向data。
+						備註：
+							1.雙向繫結一般都應用在表單類元素上（如：input、select等）
+							2.v-model:value 可以簡寫為 v-model，因為v-model預設收集的就是value值。
+		 -->
+        <label>
+            單項數據繫結:
+            <!--<input type='text' v-bind:value="name"/>-->
+            <!--簡寫-->
+            <input type='text' :value="name"/>
+        </label>
+        <label>
+            雙向數據繫結:
+            <!--<input type='text' v-model:value="name"/>-->
+            <input type='text' v-model="name"/>
+        </label>
+        <br/>
+         <!--
+         不是什麼都可用v-model的 這裡v-model不支援h1
+         v-model只能應用在表單元素上(輸入元素)，與使用者互動(都有共同的value屬性)
+         -->
+        <h1 v-bind:x="name">
+            你好啊
+        </h1>
+    </div>
+    <script type="text/javascript">
+        //v-bind可以完成數據繫結(單項繫結)
+        //v-model雙向數據繫結
+        //單項數據繫結 雙向數據繫結
+        Vue.config.productionTip = false;
+        new Vue({
+            el: '#root',
+            data:{
+                name: 'shanghai'
+            }
+        })
+    </script>
+</body>
+</html>
