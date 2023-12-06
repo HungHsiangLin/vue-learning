@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>第一次使用vue</title>
+    <!--vue js生產版本production版本-->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+     <!--插值語法-->
+     <!--vue模版-->
+        <h1>hello, {{ name }}</h1>
+    </div>
+    <div class="test">
+        <!--注意雙花括號中可以寫js表達式-->
+        <!--
+          js表達式：一個表達式產生一個值，放在任何一個需要值的地方
+                例如 (1).a (2) 1+b (3) demo(1) （4) x===y ? 1 : 0
+
+          js語句： if while for...
+        -->
+        <h1>{{name.toUpperCase()}},{{address}} {{1+1}} {{Date.now()}}</h1>
+    </div>
+    <script type="text/javascript">
+       //hello小案例
+       Vue.config.productionTip = false; //預設不提示
+       //建立vue事例對像
+       /**
+        * 注意:一個vue實例不可能去接管多個容器，如果有多個容器的情況，vue事例永遠只接管第一個容器
+        * 不能多個vue實例同時來接管同一個容器，如果有多個的情況下永遠是第一個vue實例來接管該容器
+        * vue實例與容器直接的對應關係是一對一的
+        */
+       new Vue({
+           //配置對像
+           el: '#root',// document.getElementById('root') //element el指定當前vue實例為哪一個容器服務，值通常為css選擇器格式
+           data: {
+               //data用來儲存數據，以後會用函式來表示
+               name:'panyue',
+               age:21
+           }
+       });
+
+       new Vue({
+           el: '.test',
+           data:{
+               name: 'test',
+               address: 'Tokyo'
+           }
+       })
+    </script>
+</body>
+</html>
